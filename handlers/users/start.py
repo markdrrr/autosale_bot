@@ -4,6 +4,7 @@ from aiogram.dispatcher.filters.builtin import CommandStart
 
 from keyboards.default.menu import menu
 from loader import dp, db
+from utils.db_api.sqlite.user import add_user
 
 
 @dp.message_handler(CommandStart())
@@ -13,7 +14,8 @@ async def bot_start(message: types.Message):
                          )
     user = message.from_user
     try:
-        await db.add_user(user.id, user.username)
+        # await db.add_user(user.id, user.username)
+        add_user(user.id, user.username)
         await message.answer(f'Вы зарегестрированны')
     except asyncpg.exceptions.UniqueViolationError:
         await message.answer(f'Вы уже были зарегестрированны')

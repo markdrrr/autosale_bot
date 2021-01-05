@@ -10,7 +10,7 @@ async def on_startup(dp):
 
     from utils.notify_admins import on_startup_notify
     await on_startup_notify(dp)
-    await create_table.run()
+    db.create_table_users()
 
 
 if __name__ == '__main__':
