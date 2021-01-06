@@ -5,7 +5,7 @@ from aiogram.utils.markdown import hcode
 from data import config
 from keyboards.inline.balance import balance_inline, separate_sms, paid_callback
 from loader import dp
-from utils.db_api.qiwi import add_payment, update_payment
+from utils.db_api.qiwi import add_payment, update_payment, select_payment
 from utils.db_api.user import add_balance
 from utils.misc import Payment, NoPaymentFound
 
@@ -49,8 +49,13 @@ async def cancel_payment(call: CallbackQuery, callback_data: dict):
         await call.message.answer('Транзакция не найдена')
         return
     else:
-        # обновляем сумму пополнения в бд
-        await update_payment(amount=amount, key=payment_id)
-        # обновляем баланс юзера
-        await add_balance(user_id=call.from_user.id, value=amount)
-        await call.message.answer(f'Баланс успешно пополнен на {amount}')
+        # проверяем в бд наличие такого же платежа, если нет, то все ок создаем и зачисляем в баланс
+        old_payment = await select_payment(sum=amount, key=payment_id)
+        if not old_payment:
+            # обновляем сумму пополнения в бд
+            await update_payment(amount=amount, key=payment_id)
+            # обновляем баланс юзера
+            await add_balance(user_id=call.from_user.id, value=amount)
+            await call.message.answer(f'Баланс успешно пополнен на {amount}')
+            await call.message.delete_reply_markup()
+            await call.message.delete()
