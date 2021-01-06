@@ -1,22 +1,22 @@
 from aiogram import types
 from aiogram.dispatcher.filters import Command
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
-from data.config import admins
 
+from data.config import admins
 from loader import dp
 
 
 @dp.message_handler(Command('add_admin'))
 async def bot_start(message: types.Message):
     await message.answer(f'Стать админом бота ?',
-                             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                                 [
-                                     InlineKeyboardButton(
-                                         text='Да !',
-                                         callback_data='confirm_add_admin'
-                                     )]
-                                 ]
-                             )
+                         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                             [
+                                 InlineKeyboardButton(
+                                     text='Да !',
+                                     callback_data='confirm_add_admin'
+                                 )]
+                         ]
+                         )
                          )
 
 

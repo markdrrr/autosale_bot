@@ -8,8 +8,8 @@ async def get_inline_products():
     products = get_all_products()
     for el in products:
         buttom = InlineKeyboardButton(
-            text=el[1],
-            callback_data=el[1]
+            text=el[2],
+            callback_data=el[2]
         )
         products_keyboard.add(buttom)
     products_keyboard.add(InlineKeyboardButton(

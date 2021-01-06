@@ -36,12 +36,12 @@ class Database:
 
     def create_table_users(self):
         sql = """ 
-    CREATE TABLE IF NOT EXISTS Users (
-    id INT NOT NULL,
-    Name VARCHAR(255) NOT NULL,
-    balance DECIMAL DEFAULT 0,
-    PRIMARY KEY (id))
-    """
+        CREATE TABLE IF NOT EXISTS Users (
+        id INT NOT NULL,
+        Name VARCHAR(255) NOT NULL,
+        balance DECIMAL DEFAULT 0,
+        PRIMARY KEY (id))
+        """
         self.execute(sql, commit=True)
 
     def create_table_categories(self):

@@ -7,13 +7,14 @@ from data.config import admins
 from keyboards.inline.category import get_inline_category
 from loader import dp
 from states import NewProduct
-from utils.db_api import product, category
+from utils.db_api.sqlite.category import get_all_categories, get_category
+from utils.db_api.sqlite.product import add_product
 
 
 @dp.message_handler(Command('add_product'))
-async def add_product(message: types.Message):
+async def add_product_handler(message: types.Message):
     if str(message.from_user.id) in admins:
-        categories = await category.get_all_categories()
+        categories = get_all_categories()
         if categories:
             markup = await get_inline_category()
             await message.answer(f'<b>Вы начали добавление товара</b>\n'
@@ -65,5 +66,5 @@ async def add_product_step_4(message: types.Message, state: FSMContext):
                          f'<b>Описание:</b> {data.get("description")}\n'
                          f'<b>Цена:</b> {data.get("price")}')
     await state.finish()
-    id_category = await category.get_category(name=data.get("сategory"))
-    await product.add_product(id_category.get('id'), data.get("name"), data.get("description"), data.get("price"))
+    id_category = get_category(name=data.get("сategory"))
+    add_product(id_category[0], data.get("name"), data.get("description"), data.get("price"))

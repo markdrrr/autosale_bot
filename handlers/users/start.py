@@ -14,7 +14,6 @@ async def bot_start(message: types.Message):
                          )
     user = message.from_user
     try:
-        # await db.add_user(user.id, user.username)
         add_user(user.id, user.username)
         await message.answer(f'Вы зарегестрированны')
     except asyncpg.exceptions.UniqueViolationError:

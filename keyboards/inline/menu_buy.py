@@ -40,7 +40,7 @@ async def items_keyboard(category):
                                            category=category,
                                            item_id=item[0])
         markup.insert(
-            InlineKeyboardButton(text=item[1], callback_data=callback_data)
+            InlineKeyboardButton(text=item[2], callback_data=callback_data)
         )
     markup.row(
         InlineKeyboardButton(

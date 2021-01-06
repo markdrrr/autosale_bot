@@ -1,18 +1,21 @@
 from aiogram import types
+
 from loader import dp
-from utils.db_api import product, category, staff
+from utils.db_api.sqlite.category import get_all_categories
+from utils.db_api.sqlite.product import get_products_from_category
+from utils.db_api.sqlite.staff import get_count
 
 
 @dp.message_handler(text='Прайс')
 async def bot_start(message: types.Message):
-    categories = await category.get_all_categories()
+    categories = get_all_categories()
     text = str()
     for categ in categories:
-        text += f'➖➖➖ {categ.get("name")} ➖➖➖\n'
-        products = await product.get_products_from_category(categ.get('id'))
+        text += f'➖➖➖ {categ[1]} ➖➖➖\n'
+        products = get_products_from_category(categ[0])
         for el in products:
-            count = await staff.get_count(product_id=categ.get('id'), status=0)
-            text += f'<b>{el.get("name")}</b> в наличии: {count}шт. цена: {el.get("price")}р/шт.\n'
+            count = get_count(product_id=categ[0], status=0)
+            text += f'<b>{el[2]}</b> в наличии: {count[0]}шт. цена: {el[4]}р/шт.\n'
     if text:
         await message.answer(f'{text}')
     else:

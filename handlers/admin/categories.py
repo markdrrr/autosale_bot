@@ -7,7 +7,7 @@ from data.config import admins
 from keyboards.inline.cancel import cancel_button
 from loader import dp
 from states import NewCategory
-from utils.db_api import category
+from utils.db_api.sqlite.category import add_category
 
 
 @dp.message_handler(Command('add_category'))
@@ -25,7 +25,7 @@ async def add_product_step_1(message: types.Message, state: FSMContext):
     await message.answer(f'Категория добавлена')
     data = await state.get_data()
     await state.finish()
-    await category.add_category(data.get('name'))
+    add_category(data.get('name'))
 
 
 @dp.callback_query_handler(state=NewCategory, text='cancel')

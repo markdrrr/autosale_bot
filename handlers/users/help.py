@@ -29,7 +29,7 @@ async def bot_help_buy(message: types.Message):
     if str(message.from_user.id) in admins:
         await message.answer("""
                 Команды для админа
-        Добавить категорию /add_category
-        Добавить товар /add_product
-        Добавить staff для товара /add_staff
+Добавить категорию /add_category
+Добавить товар /add_product
+Добавить staff для товара /add_staff
         """)
