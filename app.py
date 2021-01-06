@@ -1,5 +1,4 @@
 from loader import db
-from utils.db_api import create_table
 
 
 async def on_startup(dp):

@@ -1,18 +1,19 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from utils.db_api import category
+
+from utils.db_api.sqlite.category import get_all_categories
 
 
 async def get_inline_category():
     category_keyboard = InlineKeyboardMarkup(row_width=1)
-    categories = await category.get_all_categories()
+    categories = get_all_categories()
     for el in categories:
         buttom = InlineKeyboardButton(
-            text=el.get('name'),
-            callback_data=el.get('name')
+            text=el[1],
+            callback_data=el[1]
         )
         category_keyboard.add(buttom)
     category_keyboard.add(InlineKeyboardButton(
-                                                 text='Отмена',
-                                                 callback_data='cancel'
-                                             ))
+        text='Отмена',
+        callback_data='cancel'
+    ))
     return category_keyboard

@@ -1,7 +1,8 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.utils.callback_data import CallbackData
 
-from utils.db_api import category, product
+from utils.db_api.sqlite.category import get_all_categories
+from utils.db_api.sqlite.product import get_all_products
 
 menu_cd = CallbackData('show_menu', 'level', "category", 'item_id', 'count')
 buy_item = CallbackData('buy', 'item_id', 'count')
@@ -14,12 +15,12 @@ def make_callback_data(level, category, item_id='0', count=0):
 async def categories_keyboard():
     CURRENT_LEVEL = 0
     markup = InlineKeyboardMarkup(row_width=1)
-    categories = await category.get_all_categories()
+    categories = get_all_categories()
     for el in categories:
         callback_data = make_callback_data(level=CURRENT_LEVEL + 1,
-                                           category=el.get('id'))
+                                           category=el[0])
         markup.insert(
-            InlineKeyboardButton(text=el.get('name'), callback_data=callback_data)
+            InlineKeyboardButton(text=el[1], callback_data=callback_data)
         )
     markup.row(
         InlineKeyboardButton(
@@ -33,13 +34,13 @@ async def categories_keyboard():
 async def items_keyboard(category):
     CURRENT_LEVEL = 1
     markup = InlineKeyboardMarkup(row_width=1)
-    items = await product.get_all_products()
+    items = get_all_products()
     for item in items:
         callback_data = make_callback_data(level=CURRENT_LEVEL + 1,
                                            category=category,
-                                           item_id=item.get('id'))
+                                           item_id=item[0])
         markup.insert(
-            InlineKeyboardButton(text=item.get('name'), callback_data=callback_data)
+            InlineKeyboardButton(text=item[1], callback_data=callback_data)
         )
     markup.row(
         InlineKeyboardButton(
@@ -102,7 +103,7 @@ def confirm_keyboard(category, item_id, count):
             text='Назад',
             callback_data=make_callback_data(level=CURRENT_LEVEL - 1,
                                              category=category,
-                                             item_id=item_id,)
+                                             item_id=item_id, )
         )
     )
     markup.row(
