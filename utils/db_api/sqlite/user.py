@@ -17,12 +17,12 @@ def select_user(**kwargs):
     sql, parameters = db.format_args(sql, kwargs)
     return db.execute(sql, parameters, fetchone=True)
 
-#
-# async def change_balance(user_id, new_balance):
-#     sql = f"UPDATE users SET balance = {new_balance} WHERE id = {user_id}"
-#     return await db.pool.execute(sql)
-#
-#
-# async def add_balance(user_id, value):
-#     sql = f"UPDATE users SET balance = balance + {value} WHERE id = {user_id}"
-#     return await db.pool.execute(sql)
+
+def change_balance(user_id, new_balance):
+    sql = f"UPDATE users SET balance = {new_balance} WHERE id = {user_id}"
+    db.execute(sql, commit=True)
+
+
+def add_balance(user_id, value):
+    sql = f"UPDATE users SET balance = balance + {value} WHERE id = {user_id}"
+    db.execute(sql, commit=True)
